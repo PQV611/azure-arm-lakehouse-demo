@@ -1,0 +1,15 @@
+name: deploy-bicep
+on: workflow_dispatch
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: azure/login@v2
+      if: ${{ false }} # flip to true when ready; avoids needing secrets now
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: (Docs) Print next steps
+      run: |
+        echo "To deploy manually:"
+        echo "az group create -n rg-demo-lakehouse -l eastus"
+        echo "az deployment group create -g rg-demo-lakehouse -f main.bicep -p baseName=demo"

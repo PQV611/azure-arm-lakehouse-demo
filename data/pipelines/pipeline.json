@@ -1,0 +1,22 @@
+{
+  "name": "Copy_Incremental_To_Cosmos",
+  "properties": {
+    "parameters": {
+      "sourcePath": { "type": "String", "defaultValue": "customers/customers.csv" },
+      "lastWatermark": { "type": "String", "defaultValue": "2025-09-02T00:00:00Z" }
+    },
+    "activities": [
+      {
+        "name": "CopyToCosmos",
+        "type": "Copy",
+        "typeProperties": {
+          "source": { "type": "DelimitedTextSource", "treatEmptyAsNull": true },
+          "sink": { "type": "CosmosDbSqlApiSink", "writeBehavior": "upsert" },
+          "enableStaging": false
+        },
+        "inputs": [ { "referenceName": "Lake_Customers_DS", "type": "DatasetReference" } ],
+        "outputs": [ { "referenceName": "Cosmos_Customers_DS", "type": "DatasetReference" } ]
+      }
+    ]
+  }
+}

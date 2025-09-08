@@ -1,3 +1,6 @@
+var cosmosBase = toLower('${baseName}-cosmos-${uniqueString(resourceGroup().id)}')
+var cosmosName = substring(cosmosBase, 0, 44)
+param cosmosRegion string = 'eastus2' // pick an available region for Cosmos
 // ---------- Params ----------
 param location string = resourceGroup().location
 param baseName string
@@ -38,24 +41,24 @@ resource adls 'Microsoft.Storage/storageAccounts@2023-01-01' = {
 
 // ---------- Cosmos DB Account (SQL API) ----------
 resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
-  name: '${baseName}-cosmos'
-  location: location
+  name: cosmosName          // uses the auto-unique name
+  location: cosmosRegion    // place Cosmos in the alternate region
   kind: 'GlobalDocumentDB'
   properties: {
     databaseAccountOfferType: 'Standard'
     locations: [
       {
-        locationName: location
+        locationName: cosmosRegion
         failoverPriority: 0
         isZoneRedundant: false
       }
     ]
     enableAutomaticFailover: true
     isVirtualNetworkFilterEnabled: false
-    publicNetworkAccess: 'Enabled' // demo simplicity; use Private Endpoints in prod
-    capabilities: []
+    publicNetworkAccess: 'Enabled' // OK for demo; use Private Endpoints in prod
   }
 }
+
 
 // ---------- Cosmos SQL Database ----------
 resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-04-15' = {

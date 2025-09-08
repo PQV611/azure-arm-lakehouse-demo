@@ -1,36 +1,48 @@
-var cosmosBase = toLower('${baseName}-cosmos-${uniqueString(resourceGroup().id)}')
-var cosmosName = substring(cosmosBase, 0, 44)
-param cosmosRegion string = 'eastus2' // pick an available region for Cosmos
-// ---------- Params ----------
+// =====================
+// Params & switches
+// =====================
 param location string = resourceGroup().location
 param baseName string
+
+@description('Set to true to deploy Cosmos DB resources.')
+param deployCosmos bool = false
+
+@description('Cosmos region (used only when deployCosmos = true).')
+param cosmosRegion string = 'eastus2'
+
+@description('Cosmos autoscale max RU/s (used only when deployCosmos = true).')
 param cosmosAutoscaleMaxRU int = 4000
 
-// ---------- Key Vault ----------
+// =====================
+// Name helpers (unique where needed)
+// =====================
+var saBase = toLower('${baseName}adls${uniqueString(resourceGroup().id)}')
+var saName = substring(saBase, 0, 24)
+
+var cosmosBase = toLower('${baseName}-cosmos-${uniqueString(resourceGroup().id)}')
+var cosmosName = substring(cosmosBase, 0, 44)
+
+// =====================
+// Key Vault
+// =====================
 resource kv 'Microsoft.KeyVault/vaults@2023-07-01' = {
   name: '${baseName}-kv'
   location: location
   properties: {
     tenantId: subscription().tenantId
-    sku: {
-      family: 'A'
-      name: 'standard'
-    }
+    sku: { family: 'A', name: 'standard' }
     enableRbacAuthorization: true
-    networkAcls: {
-      bypass: 'AzureServices'
-      defaultAction: 'Deny'
-    }
+    networkAcls: { bypass: 'AzureServices', defaultAction: 'Deny' }
   }
 }
 
-// ---------- ADLS Gen2 ----------
+// =====================
+// ADLS Gen2 (storage)
+// =====================
 resource adls 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: '${baseName}adls'
+  name: saName
   location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
+  sku: { name: 'Standard_LRS' }
   kind: 'StorageV2'
   properties: {
     isHnsEnabled: true
@@ -39,10 +51,13 @@ resource adls 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   }
 }
 
-// ---------- Cosmos DB Account (SQL API) ----------
-resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
-  name: cosmosName          // uses the auto-unique name
-  location: cosmosRegion    // place Cosmos in the alternate region
+// =====================
+// Cosmos DB (conditional)
+// =====================
+@description('Cosmos DB Account (SQL API)')
+resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = if (deployCosmos) {
+  name: cosmosName
+  location: cosmosRegion
   kind: 'GlobalDocumentDB'
   properties: {
     databaseAccountOfferType: 'Standard'
@@ -55,44 +70,33 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
     ]
     enableAutomaticFailover: true
     isVirtualNetworkFilterEnabled: false
-    publicNetworkAccess: 'Enabled' // OK for demo; use Private Endpoints in prod
+    publicNetworkAccess: 'Enabled'  // for demo; use Private Endpoints in prod
   }
 }
 
-
-// ---------- Cosmos SQL Database ----------
-resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-04-15' = {
+@description('Cosmos SQL Database')
+resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-04-15' = if (deployCosmos) {
   name: '${cosmos.name}/opsdb'
   properties: {
-    resource: {
-      id: 'opsdb'
-    }
-    // options optional
+    resource: { id: 'opsdb' }
   }
 }
 
-// ---------- Cosmos Container ----------
-resource customers 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-04-15' = {
+@description('Cosmos Container: customers')
+resource customers 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-04-15' = if (deployCosmos) {
   name: '${cosmosDb.name}/customers'
   properties: {
     resource: {
       id: 'customers'
-      partitionKey: {
-        paths: ['/pk']
-        kind: 'Hash'
-      }
-      indexingPolicy: {
-        indexingMode: 'consistent'
-      }
+      partitionKey: { paths: ['/pk'], kind: 'Hash' }
+      indexingPolicy: { indexingMode: 'consistent' }
     }
-    options: {
-      autoscaleSettings: {
-        maxThroughput: cosmosAutoscaleMaxRU
-      }
-    }
+    options: { autoscaleSettings: { maxThroughput: cosmosAutoscaleMaxRU } }
   }
 }
 
-// ---------- Outputs ----------
+// =====================
+// Outputs
+// =====================
 output storageName string = adls.name
-output cosmosEndpoint string = cosmos.properties.documentEndpoint
+output cosmosEndpoint string = deployCosmos ? cosmos.properties.documentEndpoint : ''

